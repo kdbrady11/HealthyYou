@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Mark Medication as Taken</h2>
+
+  <!-- Medication Adherence Form -->
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- Render the adherence form -->
+    <button type="submit" class="btn btn-primary">Mark as Taken</button>
+  </form>
+
+  <h3>Your Adherence Records</h3>
+  <!-- Display existing adherence records for the user -->
+  <ul>
+    {% for record in adherence_records %}
+      <li>{{ record.medication_schedule.medication_name }} - {{ record.is_taken }} - {{ record.date }}</li>
+    {% empty %}
+      <li>You haven't marked any adherence yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

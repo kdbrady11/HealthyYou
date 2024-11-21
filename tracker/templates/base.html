@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthyYou</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<form method="POST" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+
+    <!-- Navigation bar -->
+    <nav>
+        <ul style="list-style-type: none; display: flex; gap: 15px;">
+            <li><a href="{% url 'activity_dashboard' %}">Activity Dashboard</a></li>
+            <li><a href="{% url 'medication_dashboard' %}">Medication Dashboard</a></li>
+            <li><a href="{% url 'profile' %}">User Profile</a></li>
+        </ul>
+    </nav>
+
+    <hr>
+
+    <!-- Main content block, where other templates will insert their content -->
+    <div class="content">
+        {% block content %}
+        <!-- Default content can go here if desired -->
+        {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 HealthyYou. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>

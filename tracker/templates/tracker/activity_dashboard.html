@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <hr>
+
+    <h1>Activity Dashboard</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ activity_form.as_p }}
+        <button type="submit" name="activity_submit">Add Activity</button>
+    </form>
+
+    <hr>
+
+    <!-- Activity Metrics Table -->
+    <h2>Activity Data</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Activity Minutes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for metric in activity_metrics %}
+                <tr>
+                    <td>{{ metric.date }}</td>
+                    <td>{{ metric.total_activity }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2">No activity data available</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Calorie Metrics Table -->
+    <h2>Calorie Data</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ calorie_form.as_p }}
+        <button type="submit" name="calorie_submit">Add Calorie Intake</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Calories</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for metric in calorie_metrics %}
+                <tr>
+                    <td>{{ metric.date }}</td>
+                    <td>{{ metric.total_calories }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2">No calorie data available</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Bar Chart for Activity -->
+    <h2>Activity Minutes</h2>
+    <div>
+        <canvas id="activityChart"></canvas>
+    </div>
+
+    <!-- Bar Chart for Calories -->
+    <h2>Calorie Intake</h2>
+    <div>
+        <canvas id="calorieChart"></canvas>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+    // Activity Chart
+    var ctx1 = document.getElementById('activityChart').getContext('2d');
+    var activityChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: {{ activity_dates|safe }},
+            datasets: [{
+                label: 'Activity Minutes',
+                data: {{ activity_minutes|safe }},
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Calorie Chart
+    var ctx2 = document.getElementById('calorieChart').getContext('2d');
+    var calorieChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: {{ calorie_dates|safe }},
+            datasets: [{
+                label: 'Calories',
+                data: {{ calorie_values|safe }},
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    </script>
+
+{% endblock %}

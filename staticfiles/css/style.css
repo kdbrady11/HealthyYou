@@ -1,0 +1,158 @@
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f9; /* Light gray background */
+    color: #333; /* Standard text color */
+}
+
+/* Error Message Styling */
+.errorlist {
+    color: red;
+    font-size: 14px;
+    list-style-type: none;
+    padding: 0;
+}
+
+.error-message {
+    margin-top: 10px;
+    color: red;
+    font-weight: bold;
+}
+
+/* Form Container Styling */
+.form-container {
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #ffffff; /* White background for forms */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    margin-top: 0;
+    color: #007bff; /* Blue heading for forms */
+}
+
+/* Logout Button Styling */
+.logout-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue background */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    color: white;
+}
+
+/* Navigation Bar Styling */
+nav {
+    background-color: #007bff;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    margin: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #0056b3;
+    border-radius: 5px;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff; /* White background for tables */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Headings Styling */
+h1, h2 {
+    color: #007bff;
+}
+
+/* Input and Button Styling */
+input[type="text"], input[type="number"], textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Footer Styling */
+footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #777;
+}

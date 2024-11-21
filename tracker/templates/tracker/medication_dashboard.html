@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Medication Dashboard</h2>
+
+    <!-- Button to Add Medication -->
+    <a href="{% url 'medication_schedule' %}">
+        <button type="button" class="btn btn-primary">Add Medication</button>
+    </a>
+
+    <h3>Your Medications</h3>
+    <!-- List existing medications -->
+    <ul>
+        {% for medication in medications %}
+            <li>
+                {{ medication.medication_name }} - {{ medication.dosage }} - {{ medication.time_of_day }}
+                - <a href="{% url 'medication_schedule_edit' medication.id %}">Edit</a>
+            </li>
+        {% empty %}
+            <li>You haven't added any medications yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

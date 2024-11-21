@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>User Profile</h2>
+
+  <!-- Display the profile form -->
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Profile</button>
+  </form>
+
+  <h3>Weight Tracking</h3>
+
+  <!-- Canvas for the line chart -->
+  <canvas id="weightChart" width="400" height="200"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // Prepare data for the chart
+    const weightHistory = {{ profile.weight_history|safe }};
+
+    const labels = weightHistory.map(record => record.date);
+    const weights = weightHistory.map(record => record.weight);
+
+    // Create the line chart
+    const ctx = document.getElementById('weightChart').getContext('2d');
+    const weightChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Weight Over Time',
+          data: weights,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          fill: true,
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Weight Tracking Line Chart',
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+          },
+        },
+      },
+    });
+  </script>
+{% endblock %}
