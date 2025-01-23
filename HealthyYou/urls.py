@@ -12,7 +12,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     # Includes built-in auth routes (login, logout, password reset, etc.)
     path('logout/', views.logout_view, name='logout'),  # Custom logout view
-    path('login/', views.login_required(), name='login'),  # Protected login route requiring authenticated access
+    path('login/', auth_views.LoginView.as_view(template_name="registration/login.html"), name='login'),  # Protected login route requiring authenticated access
     path('logout/', LogoutView.as_view(), name='logout'),  # Use Django's built-in logout view
 ]
 
