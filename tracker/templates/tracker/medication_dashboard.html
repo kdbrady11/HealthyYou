@@ -1,23 +1,219 @@
 {% extends 'base.html' %}
 
+<style>
+    button.active {
+        background-color: #007bff; /* Example: blue for active buttons */
+        color: white; /* Text color */
+        border-color: #0056b3; /* Match active appearance */
+        transform: scale(0.95); /* Slightly shrink button */
+    }
+    .btn-enhanced {
+        font-size: 1.25rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-enhanced:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-enhanced {
+        display: inline-block;
+        text-align: center;
+        font-size: 1.25rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+    }
+
+    .btn-enhanced:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .status-taken {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-missed {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .dashboard-header {
+        margin-bottom: 20px;
+    }
+
+    .add-medication-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table.medication-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    table.medication-table th,
+    table.medication-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    table.medication-table th {
+        background-color: #f5f5f5;
+        text-align: center;
+    }
+
+    table.medication-table tbody tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    .table-actions {
+        text-align: center;
+    }
+
+    .mark-taken {
+        color: #28a745;
+    }
+    .medication-button {
+        margin: 0 5px;
+    }
+
+    .mark-missed {
+        color: #dc3545;
+    }
+
+
+</style>
+
 {% block content %}
-    <h2>Medication Dashboard</h2>
 
-    <!-- Button to Add Medication -->
-    <a href="{% url 'medication_schedule' %}">
-        <button type="button" class="btn btn-primary">Add Medication</button>
+
+<section class="dashboard-header">
+    <p class="text-center text-muted">{{ today_date }}</p>
+    <h2 class="text-center mb-4">Medication Dashboard</h2>
+</section>
+
+<!-- Button to Add Medication -->
+<div class="add-medication-container" style="text-align: center;">
+    <a href="{% url 'medication_schedule' %}" style="background-color: gray; color: white; padding: 12px 20px; border-radius: 10px; text-decoration: none; display: inline-block; font-size: 1.25rem;">
+        <i class="fas fa-plus"></i> Add Medication
     </a>
+</div>
 
-    <h3>Your Medications</h3>
-    <!-- List existing medications -->
-    <ul>
-        {% for medication in medications %}
-            <li>
-                {{ medication.medication_name }} - {{ medication.dosage }} - {{ medication.time_of_day }}
-                - <a href="{% url 'medication_schedule_edit' medication.id %}">Edit</a>
-            </li>
+
+
+<h3 class="text-center">Your Medications</h3>
+
+<!-- Medication Table -->
+<table class="medication-table">
+    <thead>
+        <tr>
+            <th>Medication Name</th>
+            <th>Dosage</th>
+            <th>Time of Day</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for medication in medications_today %}
+            <tr class="{% if medication.has_taken %}status-taken{% elif medication.has_missed %}status-missed{% endif %}">
+                <td>{{ medication.medication_name }}</td>
+                <td>{{ medication.dosage }}</td>
+                <td>{{ medication.time_of_day }}</td>
+                <td class="table-actions">
+                    <button type="button" class="btn btn-success btn-sm medication-button-taken" id="medication-taken-button-{{ medication.id }}" data-medication-id="{{ medication.id }}" data-status="taken">✓ Taken</button>
+                    <button type="button" class="btn btn-danger btn-sm medication-button-missed" id="medication-missed-button-{{ medication.id }}" data-medication-id="{{ medication.id }}" data-status="missed">✗ Missed</button>
+                    <a href="{% url 'medication_schedule_edit' medication.id %}" class="btn btn-outline-info btn-sm">Edit</a>
+                </td>
+            </tr>
         {% empty %}
-            <li>You haven't added any medications yet.</li>
+            <tr>
+                <td colspan="4" class="text-center text-muted">You haven't added any medications yet.</td>
+            </tr>
         {% endfor %}
-    </ul>
+    </tbody>
+</table>
+
+<!-- Button for Medication Adherence -->
+<div class="add-medication-container" style="text-align: center;">
+    <a href="{% url 'medication_adherence_dashboard' %}" style="background-color: gray; color: white; padding: 12px 20px; border-radius: 10px; text-decoration: none; display: inline-block; font-size: 1.25rem;">
+        <i class="fas fa-chart-line"></i> Medication Adherence
+    </a>
+</div>
+
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
+    // Function to update medication status
+    function updateMedicationStatus(medicationId, status) {
+        fetch("{% url 'update_medication_status' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}", // CSRF Token
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                medication_id: medicationId,
+                status: status,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Locate the clicked button and update its styles
+                    const button = document.querySelector(`button[data-medication-id="${medicationId}"][data-status="${status}"]`);
+
+                    if (button) {
+                        // Reset the styles of 'Taken' and 'Missed' buttons in the row
+                        const parentRow = button.closest('tr');
+                        parentRow.querySelectorAll(".medication-button-taken, .medication-button-missed").forEach(btn => {
+                            btn.classList.remove("btn-success", "btn-danger", "active");
+                        });
+
+                        // Apply proper style only to the clicked button
+                        if (status === "taken") {
+                            button.classList.add("btn-success", "active");
+                        } else if (status === "missed") {
+                            button.classList.add("btn-danger", "active");
+                        }
+                        // Change CSS class on the row based on the status
+                        if (status === "taken") {
+                            parentRow.classList.add("status-taken");
+                            parentRow.classList.remove("status-missed");
+                        } else if (status === "missed") {
+                            parentRow.classList.add("status-missed");
+                            parentRow.classList.remove("status-taken");
+                        }
+                    } else {
+                        console.error("Button not found for medication ID:", medicationId, "and status:", status);
+                    }
+                } else {
+                    alert(data.error || "Failed to update status");
+                }
+            })
+            .catch(error => {
+                console.error("Error updating status:", error);
+            });
+    }
+
+    // Add event listeners to "Taken" and "Missed" buttons
+    document.querySelectorAll(".medication-button-taken, .medication-button-missed").forEach(button => {
+        button.addEventListener("click", function () {
+            const status = this.getAttribute("data-status"); // 'taken' or 'missed'
+            const medicationId = this.getAttribute("data-medication-id"); // Medication ID
+            updateMedicationStatus(medicationId, status);
+        });
+    });
+});
+
+</script>
+
 {% endblock %}

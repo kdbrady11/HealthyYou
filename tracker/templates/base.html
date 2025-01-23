@@ -1,41 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Define character encoding -->
     <meta charset="UTF-8">
+
+    <!-- Set viewport settings for responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page title -->
     <title>HealthyYou</title>
+
+    <!-- Load Django static files -->
     {% load static %}
+
+    <!-- Link to an external CSS file -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        /* Remove focus outline for buttons */
+        button:focus {
+            outline: none;
+        }
+    </style>
 </head>
 <body>
-<form method="POST" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button type="submit">Logout</button>
-</form>
 
     <!-- Navigation bar -->
     <nav>
-        <ul style="list-style-type: none; display: flex; gap: 15px;">
-            <li><a href="{% url 'activity_dashboard' %}">Activity Dashboard</a></li>
-            <li><a href="{% url 'medication_dashboard' %}">Medication Dashboard</a></li>
-            <li><a href="{% url 'profile' %}">User Profile</a></li>
+        <ul style="list-style-type: none; display: flex; align-items: center; justify-content: space-between; padding: 0; margin: 0;">
+
+            <!-- Left-aligned navigation links -->
+            <div style="display: flex; gap: 20px; margin-right: auto;">
+                <li>
+                    <!-- Link to Activity Dashboard -->
+                    <a href="{% url 'activity_dashboard' %}" style="text-decoration: none;">Activity Dashboard</a>
+                </li>
+                <li>
+                    <!-- Link to Medication Dashboard -->
+                    <a href="{% url 'medication_dashboard' %}" style="text-decoration: none;">Medication Dashboard</a>
+                </li>
+                <li>
+                    <!-- Link to User Profile -->
+                    <a href="{% url 'profile' %}" style="text-decoration: none;">User Profile</a>
+                </li>
+            </div>
+
+            <!-- Logout button, aligned to the right -->
+            <li style="margin-left: auto;">
+                <form method="POST" action="{% url 'logout' %}" style="margin: 0; display: inline;">
+                    {% csrf_token %} <!-- CSRF token for secure logout -->
+                    <button type="submit" style="background: green; border: none; color: white; cursor: pointer; padding: 10px; border-radius: 5px; outline: none;">
+                        Logout
+                    </button> <!-- Submit button for logout -->
+                </form>
+            </li>
         </ul>
     </nav>
 
-    <hr>
+    <hr> <!-- Separator line after navigation -->
 
-    <!-- Main content block, where other templates will insert their content -->
+    <!-- Main content block; other templates can inject their content -->
     <div class="content">
         {% block content %}
         <!-- Default content can go here if desired -->
         {% endblock %}
     </div>
 
+    <!-- Footer section -->
     <footer>
-        <p>&copy; 2024 HealthyYou. All rights reserved.</p>
+        <p>&copy; 2024 HealthyYou. All rights reserved.</p> <!-- Company copyright -->
     </footer>
 
+    <!-- Load Chart.js library globally -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Block for additional page-specific scripts -->
+    {% block scripts %}
+    <!-- Child templates can add extra scripts here -->
+    {% endblock %}
 
 </body>
 </html>

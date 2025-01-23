@@ -5,53 +5,80 @@
     <hr>
 
     <h1>Activity Dashboard</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ activity_form.as_p }}
-        <button type="submit" name="activity_submit">Add Activity</button>
-    </form>
-
-    <hr>
-
-    <!-- Activity Metrics Table -->
-    <h2>Activity Data</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Activity Minutes</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for metric in activity_metrics %}
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
+        <div style="width: 20%;">
+            <form method="POST">
+                {% csrf_token %}
+                {{ activity_form.as_p }}
+                <button type="submit" name="activity_submit">Add Activity</button>
+            </form>
+            <hr>
+            <label for="activityFilter">Filter by:</label>
+            <select id="activityFilter">
+                <option value="week">Last Week</option>
+                <option value="month">Last Month</option>
+                <option value="year">Last Year</option>
+                <option value="5years">Last 5 Years</option>
+            </select>
+            <!-- Activity Metrics Table -->
+            <h2>Activity Data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Activity Minutes</th>
+                    </tr>
+                </thead>
+                <tbody>
+{% for metric in activity_metrics|dictsortreversed:"date"|slice:":7" %}
+                        <tr>
+                            <td>{{ metric.date }}</td>
+                            <td>{{ metric.total_activity }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="2">No activity data available</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div style="width: 75%;">
+            <!-- Bar Chart for Activity -->
+            <h2>Activity Minutes</h2>
+            <div>
+                <canvas id="activityChart"></canvas>
+            </div>
+        </div>
+    </div>
+<hr>
+<h1>Caloric Tracking</h1>
+<div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
+    <div style="width: 20%;">
+        <form method="POST">
+            {% csrf_token %}
+            {{ calorie_form.as_p }}
+            <button type="submit" name="calorie_submit">Add Calorie Intake</button>
+        </form>
+        <hr>
+        <label for="calorieFilter">Filter by:</label>
+        <select id="calorieFilter">
+            <option value="week">Last Week</option>
+            <option value="month">Last Month</option>
+            <option value="year">Last Year</option>
+            <option value="5years">Last 5 Years</option>
+        </select>
+        <!-- Calorie Metrics Table -->
+        <h2>Calorie Data</h2>
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ metric.date }}</td>
-                    <td>{{ metric.total_activity }}</td>
+                    <th>Date</th>
+                    <th>Calories</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="2">No activity data available</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- Calorie Metrics Table -->
-    <h2>Calorie Data</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ calorie_form.as_p }}
-        <button type="submit" name="calorie_submit">Add Calorie Intake</button>
-    </form>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Calories</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for metric in calorie_metrics %}
+            </thead>
+            <tbody>
+        {% for metric in calorie_metrics %}
                 <tr>
                     <td>{{ metric.date }}</td>
                     <td>{{ metric.total_calories }}</td>
@@ -61,20 +88,23 @@
                     <td colspan="2">No calorie data available</td>
                 </tr>
             {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- Bar Chart for Activity -->
-    <h2>Activity Minutes</h2>
+            </tbody>
+        </table>
+    </div>
+    <div style="width: 75%;">
+        <!-- Bar Chart for Calories -->
+        <h2>Calorie Intake</h2>
+        <div>
+            <canvas id="calorieChart"></canvas>
+        </div>
+    </div>
+</div>
     <div>
         <canvas id="activityChart"></canvas>
     </div>
 
     <!-- Bar Chart for Calories -->
-    <h2>Calorie Intake</h2>
-    <div>
-        <canvas id="calorieChart"></canvas>
-    </div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
@@ -125,6 +155,14 @@
             }
         }
     });
+        // Date range filtering for activity chart
+        // Date range filtering for activity chart
+        // Date range filtering for calorie chart
+        // Date range filtering for calorie chart
+
+        // function updateChart removed
+
+        // function applyFilter removed
     </script>
 
 {% endblock %}

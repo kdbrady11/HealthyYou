@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character encoding for the document -->
+    <meta charset="UTF-8">
+
+    <!-- Ensures the page scales correctly on all devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page Title -->
+    <title>Logged Out</title>
+
+    <!-- Inline styles for the logged-out page -->
+    <style>
+        /* Basic styling for the body */
+        body {
+            margin: 0; /* Remove default browser margins */
+            font-family: Arial, sans-serif; /* Use a clean, professional font */
+            display: flex; /* Use Flexbox for layout */
+            justify-content: center; /* Center items horizontally */
+            align-items: center; /* Center items vertically */
+            height: 100vh; /* Full viewport height */
+            background-color: #f4f4f9; /* Light background for a friendly feel */
+            color: #333; /* Neutral text color for better readability */
+        }
+
+        /* Styling for the logout container */
+        .logout-container {
+            text-align: center; /* Center-align all text within the container */
+            background: white; /* White background for contrast */
+            padding: 30px; /* Add padding for inner spacing */
+            border-radius: 8px; /* Rounded corners for a modern look */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            max-width: 400px; /* Maximum width for responsiveness */
+            width: 100%; /* Full width on smaller screens */
+        }
+
+        /* Styling for the icon/image inside the container */
+        .logout-container img {
+            width: 80px; /* Icon size */
+            margin-bottom: 20px; /* Spacing below the icon */
+        }
+
+        /* Styling for the header text */
+        h1 {
+            font-size: 24px; /* Larger font for the main heading */
+            color: #444; /* Slightly darker text color for emphasis */
+            margin-bottom: 10px; /* Space below the heading */
+        }
+
+        /* Styling for the paragraph text */
+        p {
+            font-size: 16px; /* Medium font size for readability */
+            margin-bottom: 20px; /* Space below the paragraph */
+        }
+
+        /* Styling for the link (log in button) */
+        a {
+            display: inline-block; /* Make the link behave like a button */
+            background-color: #4CAF50; /* Green background to match the theme */
+            color: white; /* White text for contrast */
+            padding: 10px 15px; /* Padding inside the button */
+            text-decoration: none; /* Remove default underline */
+            border-radius: 5px; /* Rounded corners for a smooth appearance */
+            font-size: 16px; /* Readable font size for the button text */
+        }
+
+        /* Hover effect for the button */
+        a:hover {
+            background-color: #45a049; /* Slightly darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Main container for the logout page -->
+    <div class="logout-container">
+        <!-- Icon representing logout -->
+        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077086.png" alt="Heart Icon">
+
+        <!-- Header text for logout confirmation -->
+        <h1>You have been logged out</h1>
+
+        <!-- Informative message for the user -->
+        <p>Thank you for visiting! Click below to log in again:</p>
+
+        <!-- Link that redirects the user to the login page -->
+        <a href="/accounts/login/">Log In</a>
+    </div>
+</body>
+</html>

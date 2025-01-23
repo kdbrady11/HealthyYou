@@ -1,56 +1,140 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} <!-- Extends the base layout -->
 
 {% block content %}
+  <!-- Page Header -->
   <h2>User Profile</h2>
 
-  <!-- Display the profile form -->
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Profile</button>
-  </form>
+  <!-- Countdown Timer Section -->
+  <div id="birthdayTimer" style="margin-bottom: 20px; font-size: 18px; font-weight: bold; color: #333;">
+    Time Remaining Until Next Birthday: <span id="timer"></span>
+  </div>
 
-  <h3>Weight Tracking</h3>
+  <!-- Profile Layout Container -->
+  <div style="display: flex; gap: 20px; align-items: flex-start;">
 
-  <!-- Canvas for the line chart -->
-  <canvas id="weightChart" width="400" height="200"></canvas>
+    <!-- Profile Form Section -->
+    <div style="flex: 1; border-right: 1px solid #ccc; padding-right: 20px;">
+      <h3>Edit Profile</h3>
+      <form method="POST">
+        {% csrf_token %} <!-- Adds CSRF token for form security -->
+        {{ form.as_p }} <!-- Render the profile form fields dynamically -->
+        <button type="submit">Save Profile</button> <!-- Submit button -->
+      </form>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <!-- Weight History Table -->
+      <h3 style="margin-top: 40px;">Weight History</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 10px; border: 1px solid #ddd; text-align: left;">
+        <thead>
+          <tr>
+            <th style="border: 1px solid #ddd; padding: 8px;">Date</th> <!-- Table header for date -->
+            <th style="border: 1px solid #ddd; padding: 8px;">Weight (lbs.)</th> <!-- Table header for weight -->
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in profile.weight_history %}
+            <tr>
+              <td style="border: 1px solid #ddd; padding: 8px;">{{ record.date }}</td> <!-- Date of the weight entry -->
+              <td style="border: 1px solid #ddd; padding: 8px;">{{ record.weight }}</td> <!-- Weight entry -->
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
-  <script>
+    <!-- Chart Section -->
+    <div style="flex: 3; text-align: center;">
+      <h3>Weight Tracking</h3>
+      <canvas id="weightChart" style="max-width: 100%; height: auto;"></canvas> <!-- Canvas for rendering chart -->
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Chart.js Weight Chart Integration
+  const weightHistory = {{ profile.weight_history|default:"[]"|safe }}; // Weight history passed from backend as a JSON-encoded list
+  console.log("Weight History:", weightHistory); // Debug the weight history
+
+  if (weightHistory.length) {
     // Prepare data for the chart
-    const weightHistory = {{ profile.weight_history|safe }};
+    const labels = weightHistory.map(record => record.date); // Extract dates
+    const weights = weightHistory.map(record => record.weight); // Extract weights
 
-    const labels = weightHistory.map(record => record.date);
-    const weights = weightHistory.map(record => record.weight);
-
-    // Create the line chart
+    // Initialize the chart
     const ctx = document.getElementById('weightChart').getContext('2d');
-    const weightChart = new Chart(ctx, {
-      type: 'line',
+    new Chart(ctx, {
+      type: 'line', // Line chart type
       data: {
-        labels: labels,
+        labels: labels, // X-axis labels (dates)
         datasets: [{
-          label: 'Weight Over Time',
-          data: weights,
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          fill: true,
-        }],
+          label: 'Weight Over Time', // Dataset label
+          data: weights, // Y-axis data (weights)
+          borderColor: 'rgba(75, 192, 192, 1)', // Line color
+          backgroundColor: 'rgba(75, 192, 192, 0.2)', // Fill under the line
+          fill: true, // Enable fill coloring
+        }]
       },
       options: {
-        responsive: true,
+        responsive: true, // Make chart responsive
         plugins: {
           title: {
-            display: true,
-            text: 'Weight Tracking Line Chart',
+            display: true, // Display chart title
+            text: 'Weight Tracking Line Chart' // Chart title text
           },
           tooltip: {
-            mode: 'index',
-            intersect: false,
-          },
+            mode: 'index', // Tooltip display mode
+            intersect: false // Allow tooltip to show for all intersecting points
+          }
         },
       },
     });
-  </script>
+  } else {
+    // Hide the chart if no weight history data is available
+    document.getElementById('weightChart').style.display = 'none';
+  }
+
+  // Birthday Countdown Timer Functionality
+  const dob = "{{ profile.dob|date:'Y-m-d' }}"; // User's date of birth passed from backend
+  console.log("Date of Birth:", dob); // Debug the date of birth
+
+  if (dob && dob !== "None") {
+    const birthday = new Date(dob); // Parse the date of birth
+    const today = new Date();
+
+    // Adjust the birthday to the next occurrence
+    birthday.setFullYear(today.getFullYear());
+    if (today > birthday) {
+      birthday.setFullYear(today.getFullYear() + 1); // Move to next year if birthday has passed
+    }
+
+    // Update timer display
+    function updateTimer() {
+      const now = new Date();
+      const timeDifference = birthday - now;
+
+      if (timeDifference <= 0) {
+        // If timer reaches zero, display a birthday message
+        document.getElementById("timer").innerHTML = "Happy Birthday!";
+        clearInterval(timerInterval); // Stop the timer
+        return;
+      }
+
+      // Calculate days, hours, minutes, and seconds remaining
+      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+      // Display the time remaining
+      document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    const timerInterval = setInterval(updateTimer, 1000); // Update the timer every second
+    updateTimer(); // Run the timer immediately on page load
+  } else {
+    // Handle case where date of birth is not provided
+    document.getElementById("birthdayTimer").innerHTML = "Date of Birth not provided.";
+  }
+</script>
 {% endblock %}

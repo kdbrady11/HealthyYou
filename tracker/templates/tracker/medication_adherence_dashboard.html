@@ -1,22 +1,71 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Mark Medication as Taken</h2>
+  <h2 class="text-center">Medication Adherence Overview</h2>
 
-  <!-- Medication Adherence Form -->
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}  <!-- Render the adherence form -->
-    <button type="submit" class="btn btn-primary">Mark as Taken</button>
-  </form>
+  <!-- Section for Today's Adherence -->
+<div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 30px;">
+  <div id="adherence-today">
+    <h3 class="text-center">Adherence Today</h3>
+    <canvas id="adherenceTodayPieChart" width="400" height="400"></canvas>
+  </div>
+  <div id="adherence-all-time">
+    <h3 class="text-center">All-Time Adherence</h3>
+    <canvas id="adherenceAllTimePieChart" width="400" height="400"></canvas>
+  </div>
+</div>
+  </div>
 
-  <h3>Your Adherence Records</h3>
-  <!-- Display existing adherence records for the user -->
-  <ul>
-    {% for record in adherence_records %}
-      <li>{{ record.medication_schedule.medication_name }} - {{ record.is_taken }} - {{ record.date }}</li>
-    {% empty %}
-      <li>You haven't marked any adherence yet.</li>
-    {% endfor %}
-  </ul>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Data passed from the backend (Django context)
+        const adherenceTodayData = {{ adherence_today_data|safe }}; // JSON-encoded data for "today"
+        const adherenceAllTimeData = {{ adherence_all_time_data|safe }}; // JSON-encoded data for "all-time"
+
+        // Pie chart for Today's Adherence
+        const ctxToday = document.getElementById('adherenceTodayPieChart').getContext('2d');
+        new Chart(ctxToday, {
+            type: 'pie',
+            data: {
+                labels: ['Taken', 'Not Taken', 'Not Recorded'],
+                datasets: [{
+                    data: adherenceTodayData, // Data [taken, not taken, not recorded]
+                    backgroundColor: ['#28a745', '#dc3545', '#6c757d'], // Green, Red, Gray
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Pie chart for All-Time Adherence
+        const ctxAllTime = document.getElementById('adherenceAllTimePieChart').getContext('2d');
+        new Chart(ctxAllTime, {
+            type: 'pie',
+            data: {
+                labels: ['Taken', 'Not Taken', 'Not Recorded'],
+                datasets: [{
+                    data: adherenceAllTimeData, // Data [taken, not taken, not recorded]
+                    backgroundColor: ['#28a745', '#dc3545', '#6c757d'], // Green, Red, Gray
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    });
+  </script>
 {% endblock %}

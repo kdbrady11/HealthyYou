@@ -12,113 +12,115 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Base directory for the project (root directory).
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
+# Replace the below key in production with a secure value loaded from environment variables.
 SECRET_KEY = 'django-insecure-#t7zj-!y2*lffxwt_*_7s6ip+_3duoafpeql@0h=mum2i#7ylt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG should be set to False in production to disable sensitive error logging.
 DEBUG = True
 
+# Hosts/domains that are allowed to serve the application.
+# Update this list in production with actual domain names.
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'tracker',
+    # Default Django apps
+    'django.contrib.admin',  # Admin interface
+    'django.contrib.auth',  # Authentication framework
+    'django.contrib.contenttypes',  # Content type framework
+    'django.contrib.sessions',  # Session management
+    'django.contrib.messages',  # Messaging framework
+    'django.contrib.staticfiles',  # Static files management
+
+    # Custom apps
+    'tracker',  # Add additional apps as necessary
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Middleware for security and request processing
+    'django.middleware.security.SecurityMiddleware',  # Security enhancements
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Session handling
+    'django.middleware.common.CommonMiddleware',  # Common HTTP processing
+    'django.middleware.csrf.CsrfViewMiddleware',  # CSRF protection
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Authentication
+    'django.contrib.messages.middleware.MessageMiddleware',  # Message framework
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',  # Protects against clickjacking
 ]
 
+# Root URL configuration for the project
 ROOT_URLCONF = 'HealthyYou.urls'
 
+# Templates configuration
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
-        'APP_DIRS': True,
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',  # Template engine
+        'DIRS': [BASE_DIR / 'templates'],  # Directory for global templates
+        'APP_DIRS': True,  # Automatically find templates in app directories
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',  # Adds the request object to templates
+                'django.contrib.auth.context_processors.auth',  # Adds user authentication data
+                'django.contrib.messages.context_processors.messages',  # Adds messaging context
             ],
         },
     },
 ]
 
+# WSGI application entry point
 WSGI_APPLICATION = 'HealthyYou.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+# Database configuration
+# Default database is SQLite; update according to your production needs.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',  # Database backend
+        'NAME': BASE_DIR / 'db.sqlite3',  # Database file path
     }
 }
 
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
+# Validators for enforcing strong password policies.
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        # Prevent passwords too similar to user data
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # Enforce minimum password length
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # Prevent common/weak passwords
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        # Prevent passwords that are only numeric
     },
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
+# Settings for language and timezone
+LANGUAGE_CODE = 'en-us'  # Default language
+TIME_ZONE = 'UTC'  # Default timezone
+USE_I18N = True  # Enable internationalization
+USE_TZ = True  # Enable timezone-aware datetime objects
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# Configuration for serving static files
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Directories with static files during development
+STATIC_URL = '/static/'  # URL for accessing static files
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Directory where static files are collected for production deployment
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/dashboard/activity/'
-LOGOUT_REDIRECT_URL = '/login/'
+
+# Redirection URLs for login/logout flow
+LOGIN_URL = '/login/'  # URL where users are redirected to login
+LOGIN_REDIRECT_URL = '/dashboard/activity/'  # URL where users are redirected after login
+LOGOUT_REDIRECT_URL = '/logout/'  # URL where users are redirected after logging out

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character encoding for the document -->
+    <meta charset="UTF-8">
+
+    <!-- Viewport settings for responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page title -->
+    <title>Welcome to HealthyYou</title>
+
+    <!-- Inline styles for the sign-up page -->
+    <style>
+        /* Overall body styling */
+        body {
+            font-family: Arial, sans-serif; /* Clean and professional font */
+            margin: 0; /* Remove default browser margins */
+            padding: 0; /* Remove default browser padding */
+            background: #f4f4f9; /* Light gray background color */
+            color: #333; /* Neutral text color */
+        }
+
+        /* Container for the form and messages */
+        .container {
+            max-width: 700px; /* Limit maximum width for readability */
+            margin: 50px auto; /* Center container vertically and horizontally */
+            padding: 20px; /* Add inner spacing */
+            background: #fff; /* White background for a clean look */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            border-radius: 8px; /* Rounded corners for a modern design */
+            overflow: hidden; /* Prevent unexpected overflow */
+        }
+
+        /* Styling the header text */
+        h1 {
+            text-align: center; /* Center the heading */
+            margin-bottom: 20px; /* Space below the heading */
+            color: #444; /* Slightly darker text color for emphasis */
+        }
+
+        /* Styling the form container */
+        form {
+            display: flex; /* Use flexbox for better control */
+            flex-direction: column; /* Stack the inputs vertically */
+        }
+
+        /* Styling for input fields */
+        form input {
+            margin-bottom: 10px; /* Add spacing between input fields */
+            padding: 10px; /* Add inner space for readability */
+            font-size: 16px; /* Make text in inputs readable */
+            border: 1px solid #ccc; /* Light gray border for inputs */
+            border-radius: 5px; /* Round corners of inputs */
+        }
+
+        /* Styling for the submit button */
+        button {
+            background-color: #4CAF50; /* Green background to match the theme */
+            color: white; /* White text contrast for the button */
+            padding: 10px 15px; /* Add button padding for better UX */
+            border: none; /* Remove default button border */
+            border-radius: 5px; /* Rounded corners on the button */
+            cursor: pointer; /* Pointer cursor for interactivity */
+        }
+
+        /* Button hover effect */
+        button:hover {
+            background-color: #45a049; /* Slightly darker green for hover effect */
+        }
+
+        /* Styling for success or info messages */
+        .message {
+            padding: 10px; /* Add padding inside the message box */
+            background: lightgreen; /* Light green background for positive messages */
+            color: darkgreen; /* Dark green text for readability */
+            border-radius: 5px; /* Rounded corners for the message box */
+            margin-top: 10px; /* Add margin above messages */
+        }
+    </style>
+</head>
+<body>
+    <!-- Main container for the sign-up form -->
+    <div class="container">
+        <!-- Page heading -->
+        <h1>Create an Account</h1>
+
+        <!-- Display Django messages (e.g., success or error notifications) -->
+        {% if messages %}
+            {% for message in messages %}
+                <!-- Message container for each message -->
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- User registration form -->
+        <form method="POST">
+            {% csrf_token %} <!-- CSRF token for secure form submission -->
+            {{ form.as_p }} <!-- Render fields using Django's as_p method for paragraph styling -->
+            <button type="submit">Sign Up</button> <!-- Submit button for registration -->
+        </form>
+
+        <br>
+
+        <!-- Link to login page for already registered users -->
+        <p>Already have an account? <a href="/accounts/login/">Log in here.</a></p>
+    </div>
+</body>
+</html>

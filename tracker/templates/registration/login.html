@@ -1,16 +1,113 @@
-<!-- templates/registration/login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Character encoding for the document -->
     <meta charset="UTF-8">
-    <title>Login</title>
+
+    <!-- Ensures proper rendering on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Title of the page -->
+    <title>Login | HealthyYou</title>
+
+    <!-- Inline styles for the login page -->
+    <style>
+        /* Basic Reset for a clean start */
+        body {
+            margin: 0; /* Remove default margins */
+            font-family: Arial, sans-serif; /* Set a user-friendly font */
+            background-color: #f4f4f9; /* Light background color */
+            color: #333; /* Text color */
+            display: flex; /* Flexbox layout for centering */
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+            height: 100vh; /* Make body take full viewport height */
+        }
+
+        /* Styling for the login container */
+        .login-container {
+            background: white; /* White background for contrast */
+            padding: 30px; /* Inner spacing for content */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            max-width: 400px; /* Maximum width for better responsiveness */
+            width: 100%; /* Full width on smaller screens */
+        }
+
+        /* Header styling within the login container */
+        .login-container h2 {
+            margin: 0 0 20px 0; /* Spacing below the header */
+            font-size: 24px; /* Font size for the title */
+            color: #444; /* Slightly darker gray for emphasis */
+            text-align: center; /* Center-align header text */
+        }
+
+        /* Form container formatting */
+        form {
+            display: flex; /* Flexbox layout for vertical arrangement */
+            flex-direction: column; /* Stack elements vertically */
+        }
+
+        /* Form input fields styling */
+        form input {
+            margin-bottom: 15px; /* Spacing between inputs */
+            padding: 10px; /* Inner padding of inputs */
+            border: 1px solid #ccc; /* Light gray border */
+            border-radius: 5px; /* Rounded corners for inputs */
+            font-size: 16px; /* Readable font size for text inputs */
+        }
+
+        /* Button styling for the submit button */
+        button {
+            background-color: #4CAF50; /* Primary green color */
+            color: white; /* White text for contrast */
+            border: none; /* No extra border */
+            padding: 10px; /* Padding for the button */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 16px; /* Readable button text */
+            cursor: pointer; /* Pointer cursor for better UX */
+        }
+
+        /* Button hover effect for better UX */
+        button:hover {
+            background-color: #45a049; /* Slightly darker green on hover */
+        }
+
+        /* Styling for the alternate link container */
+        .alternate-link {
+            text-align: center; /* Center-align the text */
+            margin-top: 15px; /* Space above the link */
+        }
+
+        /* Styling for links to emphasize navigation options */
+        .alternate-link a {
+            color: #4CAF50; /* Match the theme with green color */
+            text-decoration: none; /* Remove underline for cleaner look */
+        }
+
+        /* Hover effect for links */
+        .alternate-link a:hover {
+            text-decoration: underline; /* Underline on hover for clarity */
+        }
+    </style>
 </head>
 <body>
-    <h2>Login</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
+    <!-- Main container for the login form -->
+    <div class="login-container">
+        <!-- Page title -->
+        <h2>Login to HealthyYou</h2>
+
+        <!-- Form for user login -->
+        <form method="POST">
+            {% csrf_token %} <!-- CSRF token for secure form submission -->
+            {{ form.as_p }} <!-- Render the form fields dynamically -->
+            <button type="submit">Log In</button> <!-- Submit button -->
+        </form>
+
+        <!-- Alternate navigation options -->
+        <div class="alternate-link">
+            <p>Don't have an account? <a href="/">Sign Up</a></p> <!-- Link to sign-up page -->
+        </div>
+    </div>
 </body>
 </html>

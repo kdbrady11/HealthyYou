@@ -1,11 +1,18 @@
-from django.contrib.auth import views as auth_views
+from django.contrib.auth import views as auth_views  # Import Django's built-in authentication views
+from django.contrib import admin  # Import Django admin module
+from django.contrib.auth.views import LogoutView  # Import logout view for handling user logouts
+from django.urls import path, include  # Import path and include for URL routing
+from tracker import views  # Import views from the tracker app (e.g., homepage view)
 
-from django.urls import include, path
-import django.contrib.admin as admin
-
+# Define URL patterns for the project
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('dashboard/', include('tracker.urls')),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),  # Redirect to login after logout
+    path('admin/', admin.site.urls),  # Admin site route
+    path('', views.homepage, name='homepage'),  # Route for the homepage
+    path('dashboard/', include('tracker.urls')),  # Includes URLs for the dashboard (handled in tracker.urls)
+    path('accounts/', include('django.contrib.auth.urls')),
+    # Includes built-in auth routes (login, logout, password reset, etc.)
+    path('logout/', views.logout_view, name='logout'),  # Custom logout view
+    path('login/', views.login_required(), name='login'),  # Protected login route requiring authenticated access
+    path('logout/', LogoutView.as_view(), name='logout'),  # Use Django's built-in logout view
 ]
+

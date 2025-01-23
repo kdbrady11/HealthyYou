@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"> <!-- Set character encoding for the document -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensure proper responsive scaling on mobile devices -->
     <title>HealthyYou</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    {% load static %} <!-- Django tag to load static file functionality -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- Link to the external CSS file stored in the static directory -->
 </head>
 <body>
 
     <!-- Navigation bar -->
     <nav>
         <ul style="list-style-type: none; display: flex; gap: 15px;">
-            <li><a href="{% url 'activity_dashboard' %}">Activity Dashboard</a></li>
-            <li><a href="{% url 'medication_dashboard' %}">Medication Dashboard</a></li>
-            <li><a href="{% url 'profile' %}">User Profile</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
+            <!-- Navigation links using URL routing defined in Django's URL configuration -->
+            <li><a href="{% url 'activity_dashboard' %}">Activity Dashboard</a></li> <!-- Links to activity dashboard -->
+            <li><a href="{% url 'medication_dashboard' %}">Medication Dashboard</a></li> <!-- Links to medication dashboard -->
+            <li><a href="{% url 'profile' %}">User Profile</a></li> <!-- Links to the user profile page -->
+            <li><a href="{% url 'logout' %}">Logout</a></li> <!-- Logs the user out -->
         </ul>
     </nav>
 
     <hr>
 
-    <!-- Main content block, where other templates will insert their content -->
+    <!-- Main content block -->
     <div class="content">
         {% block content %}
-        <!-- Default content can go here if desired -->
+        <!-- The default content block is empty, allowing child templates to override and insert custom content -->
         {% endblock %}
     </div>
 
+    <!-- Footer section -->
     <footer>
-        <p>&copy; 2024 HealthyYou. All rights reserved.</p>
+        <p>&copy; 2024 HealthyYou. All rights reserved.</p> <!-- Copyright information -->
     </footer>
 
+    <!-- External JavaScript library for generating charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </body>
